@@ -16,21 +16,21 @@ private:
 public:
     Data()
     {
-        this->dia=0;
-        this->mes=0;
-        this->ano=0;
+        setDia(0);
+        setMes(0);
+        setAno(0);
     }
     Data(int ano)
     {
-        this->dia=0;
-        this->mes=0; 
-        this->ano=ano;
+        setDia(0);
+        setMes(0); 
+        setAno(ano);
     }
     Data(int dia, int mes, int ano)
     {
-        this->dia=dia;
-        this->mes=mes;
-        this->ano=ano;
+        setDia(dia);
+        setMes(mes);
+        setAno(ano);
     }
     void setDia(int dia);
     int getDia();
@@ -77,23 +77,23 @@ public:
     static int TAMPES;
     Pessoas()
     {
-        this->nome="";
+        setNome("");
         this->dataNascimento= Data();
-        this->cpf="";
+        setCpf("");
         TAMPES++;
     }
     Pessoas(string nome, string cpf)
     {
-        this->nome=nome;
+        setNome(nome);
         this->dataNascimento= Data();
-        this->cpf=cpf;
+        setCpf(cpf);
         TAMPES++;
     }
     Pessoas(string nome, int dia, int mes, int ano, string cpf)
     {
-        this->nome=nome;
+        setNome(nome);
         this->dataNascimento= Data(dia, mes, ano);
-        this->cpf=cpf;
+        setCpf(cpf);
         TAMPES++;
     }
     ~Pessoas()
@@ -163,13 +163,28 @@ string Pessoas::getCpf()
     return this->cpf;
 }
 // Class aluno
-class Alunos:Pessoas{
+class Alunos:public Pessoas{
 private:
     string numeroMatricula;
 public:
     void setNumeroMatricula(string numeroMatricula);
     string getNumeroMatricula();
     static int TAMALUNO;
+    Alunos():Pessoas()
+    {
+        setNumeroMatricula("");
+        TAMALUNO++;
+    }
+    Alunos(string nome, string cpf, string numeroMatricula):Pessoas(nome, cpf)
+    {
+        setNumeroMatricula(numeroMatricula);
+        TAMALUNO++;
+    }
+    Alunos(string nome, int dia, int mes, int ano, string cpf, string numeroMatricula):Pessoas(nome, dia, mes, ano, cpf)
+    {
+        setNumeroMatricula(numeroMatricula);
+        TAMALUNO++;
+    }
 };
 int Alunos::TAMALUNO=0;
 // Set número de matrícula
@@ -183,13 +198,28 @@ string Alunos::getNumeroMatricula()
     return this->numeroMatricula;
 }
 // Class professor
-class Professores:Pessoas{
+class Professores:public Pessoas{
 private:
     string titulacao;
-    static int TAMPROFESSOR;
 public:
+    static int TAMPROFESSOR;
     void setTitulacao(string titulacao);
     string getTitulacao();
+    Professores():Pessoas()
+    {
+        setTitulacao("");
+        TAMPROFESSOR++;
+    }
+    Professores(string nome, string cpf, string titulo):Pessoas(nome, cpf)
+    {
+        setTitulacao(titulo);
+        TAMPROFESSOR++;
+    }
+    Professores(string nome, int dia, int mes, int ano, string cpf, string titulo):Pessoas(nome, dia, mes, ano, cpf)
+    {
+        setTitulacao(titulo);
+        TAMPROFESSOR++;
+    }
 };
 int Professores::TAMPROFESSOR=0;
 // Set titulação do professor
@@ -280,14 +310,26 @@ bool validandoData(int dia, int mes, int ano)
     }
     return erro;
 }
-// Escrevendo no arquivo
-void escrevendoArquivo(Pessoas *pessoa)
+// Escrevendo aluno no arquivo
+void escrevendoAlunoArquivo(Alunos *aluno)
 {
     ofstream arquivo;
     if(Pessoas::TAMPES==0) arquivo.open("pessoas.txt");
     else arquivo.open("pessoas.txt", ios::app);
-    arquivo << "Nome: " << pessoa->getNome() << " - Data de nascimento: " << pessoa->getDia() <<
-    "/" << pessoa->getMes() << "/" << pessoa->getAno() << " - CPF: " << pessoa->getCpf() << endl;
+    arquivo << "ALUNO-> Nome: " << aluno->getNome() << " - Data de nascimento: " << aluno->getDia() <<
+    "/" << aluno->getMes() << "/" << aluno->getAno() << " - CPF: " << aluno->getCpf() << " - Matrícula: " 
+    << aluno->getNumeroMatricula() << endl;
+    arquivo.close();  
+}
+// Escrevendo professor no arquivo
+void escrevendoProfessorArquivo(Professores *professor)
+{
+    ofstream arquivo;
+    if(Pessoas::TAMPES==0) arquivo.open("pessoas.txt");
+    else arquivo.open("pessoas.txt", ios::app);
+    arquivo << "PROFESSOR-> Nome: " << professor->getNome() << " - Data de nascimento: " << professor->getDia() <<
+    "/" << professor->getMes() << "/" << professor->getAno() << " - CPF: " << professor->getCpf() << " - Matrícula: " 
+    << " - Título: " << professor->getTitulacao() << endl;
     arquivo.close();  
 }
 // Conferindo se CPF existe
@@ -328,19 +370,50 @@ int escolhaOpcao1()
     }
     return x;
 }
+// Registrando título
+string registrandoTitulo()
+{
+    int x;
+    bool erro=true;
+    cout << "\nEscolhendo o título do professor:";
+    while (erro)
+    {
+        cout << "\n1 para: Especialista";
+        cout << "\n2 para: Mestre";
+        cout << "\n3 para: Doutor";
+        cout << "\nDigite: ";
+        cin >> x;
+        if(x>=1 && x<=3) erro= false;
+        else cout << "\nSomente números de 1 a 3\a";
+    }
+    string titulo;
+    switch (x)
+    {
+    case 1:
+        titulo= "Especialista";
+        break;
+    case 2:
+        titulo= "Mestre";
+        break;
+    case 3:
+        titulo= "Doutor"; 
+        break;
+    default:
+        break;
+    }
+    return titulo;
+}
 // Cadastrar professor
 void cadastrarProfessor(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
 {
-
-}
-// Cadastrar alunos
-void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
-{
     string nome;
+    // Nome
     cout << "\n\nDigite seu nome: ";
     cin.ignore();
     getline(cin, nome);
+    // CPF
     string cpf= registrandoCpf(pessoa);
+    // Data
     int dia, mes, ano;
     bool erro = true;
     while (erro)
@@ -349,11 +422,72 @@ void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[]
         scanf("%d/%d/%d", &dia, &mes, &ano);
         if (!validandoData(dia, mes, ano)) erro = false;
     }
-    int x = Pessoas::TAMPES;
-    pessoa[x] = new Pessoas(nome, dia, mes, ano, cpf);
-    escrevendoArquivo(pessoa[x]);
+    // Título
+    string titulo= registrandoTitulo();
+    // Adicionando
+    int x = Professores::TAMPROFESSOR;
+    professor[x] = new Professores(nome, dia, mes, ano, cpf, titulo);
+    escrevendoProfessorArquivo(professor[x]);
+    // Mensagens
     cout << "\nPessoa cadastrada com sucesso!";
     cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+    cout << endl << "Total de professores: " << Professores::TAMPROFESSOR;
+    cout << endl << "Total de alunos: " << Alunos::TAMALUNO;
+}
+// Conferindo matrícula
+bool conferinfoMatricula(string matricula, Alunos *aluno[])
+{
+    for (int i=0; i<Alunos::TAMALUNO; i++)
+    {
+       if(aluno[i]->getNumeroMatricula()==matricula) return false; 
+    }
+    return true;
+}
+// Registrando matrícula
+string registrandoMatricula(Alunos *aluno[])
+{
+    string matricula;
+    bool erro= true;
+    while(erro)
+    {
+        cout << "\nDigite seu número de matrícula: ";
+        cin.ignore();
+        getline(cin, matricula);
+        if(conferinfoMatricula(matricula, aluno)) erro= false;
+        else cout << "\nEsse número de matrícula já está cadastrado";
+    }
+    return matricula;
+}
+// Cadastrar alunos
+void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
+{
+    string nome;
+    // Nome
+    cout << "\n\nDigite seu nome: ";
+    cin.ignore();
+    getline(cin, nome);
+    // CPF
+    string cpf= registrandoCpf(pessoa);
+    // Data
+    int dia, mes, ano;
+    bool erro = true;
+    while (erro)
+    {
+        cout << "\nDigite sua data de nascimento[xx/xx/xxxx]: ";
+        scanf("%d/%d/%d", &dia, &mes, &ano);
+        if (!validandoData(dia, mes, ano)) erro = false;
+    }
+    // Matrícula
+    string matricula= registrandoMatricula(aluno);
+    // Adicionando
+    int x = Alunos::TAMALUNO;
+    aluno[x] = new Alunos(nome, dia, mes, ano, cpf, matricula);
+    escrevendoAlunoArquivo(aluno[x]);
+    // Mensagens
+    cout << "\nPessoa cadastrada com sucesso!";
+    cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+    cout << endl << "Total de professores: " << Professores::TAMPROFESSOR;
+    cout << endl << "Total de alunos: " << Alunos::TAMALUNO;
 }
 // Opções opção 1
 void opcoesOpcao1(int x, Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
@@ -512,6 +646,26 @@ void opcao5(Pessoas *pessoa[])
     else cout << "Não existe ninguém com esse CPF, confira se digitou certo";
     
 }
+// Opção 6
+void opcao6(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
+{
+    ofstream arquivo;
+    arquivo.open("pessoas.txt");
+    arquivo.close();
+    for(int i=0; i<Pessoas::TAMPES; i++)
+    {
+        delete(pessoa[i]);
+    }
+    for(int i=0; i<Alunos::TAMPES; i++)
+    {
+        delete(aluno[i]);
+    }
+    for(int i=0; i<Professores::TAMPES; i++)
+    {
+        delete(professor[i]);
+    }
+    cout << "\n\nPessoas apagadas com sucesso";
+}
 // Opções
 void opcoes(int x, Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
 {
@@ -532,11 +686,13 @@ void opcoes(int x, Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
     case 5:
         opcao5(pessoa);
         break;
+    case 6:
+        opcao6(pessoa, aluno, professor);
+        break;
     default:
         break;
     }
 }// Lendo pessoas do arquivo
-
 void registrandoPessoas(Pessoas *pessoa[])
 {
     ifstream arquivo("pessoas.txt");
