@@ -1,0 +1,550 @@
+// Bibliotecas
+#include <iostream>
+#include <locale.h>
+#include <fstream>
+#include <cstdio>
+#include <cstring>
+// Definições
+using namespace std;
+#define _MAX 100
+// Class data
+class Data{
+private:
+    int dia;
+    int mes;
+    int ano;
+public:
+    Data()
+    {
+        this->dia=0;
+        this->mes=0;
+        this->ano=0;
+    }
+    Data(int ano)
+    {
+        this->dia=0;
+        this->mes=0; 
+        this->ano=ano;
+    }
+    Data(int dia, int mes, int ano)
+    {
+        this->dia=dia;
+        this->mes=mes;
+        this->ano=ano;
+    }
+    void setDia(int dia);
+    int getDia();
+    void setMes(int mes);
+    int getMes();
+    void setAno(int ano);
+    int getAno();
+};
+// Set dia 
+void Data::setDia(int dia)
+{
+    this->dia= dia;
+}
+// Get dia
+int Data::getDia()
+{
+    return this->dia;
+}
+void Data::setMes(int mes)
+{
+    this->mes= mes;
+}
+// Get mês
+int Data::getMes()
+{
+     return this->mes;
+}
+void Data::setAno(int ano)
+{
+    this->ano= ano;
+}
+// Get ano
+int Data::getAno()
+{
+     return this->ano;
+}
+// Class pessoas
+class Pessoas{
+private:
+    string nome;
+    Data dataNascimento;
+    string cpf;
+public:
+    static int TAMPES;
+    Pessoas()
+    {
+        this->nome="";
+        this->dataNascimento= Data();
+        this->cpf="";
+        TAMPES++;
+    }
+    Pessoas(string nome, string cpf)
+    {
+        this->nome=nome;
+        this->dataNascimento= Data();
+        this->cpf=cpf;
+        TAMPES++;
+    }
+    Pessoas(string nome, int dia, int mes, int ano, string cpf)
+    {
+        this->nome=nome;
+        this->dataNascimento= Data(dia, mes, ano);
+        this->cpf=cpf;
+        TAMPES++;
+    }
+    ~Pessoas()
+    {
+        if (Pessoas::TAMPES > 0) Pessoas::TAMPES--;
+    }
+    void setNome(string nome);
+    string getNome();
+    void setDia(int dia);
+    int getDia();
+    void setMes(int mes);
+    int getMes();
+    void setAno(int ano);
+    int getAno();
+    void setCpf(string cpf);
+    string getCpf();
+};
+int Pessoas::TAMPES=0;
+// Set dia Pessoas
+void Pessoas::setDia(int dia)
+{
+    this->dataNascimento.setDia(dia);
+}
+// Get dia Pessoas
+int Pessoas::getDia()
+{
+    return this->dataNascimento.getDia();
+}
+// Set mês Pessoas
+void Pessoas::setMes(int mes)
+{
+    this->dataNascimento.setMes(mes);
+}
+// Get mês Pessoas
+int Pessoas::getMes()
+{
+    return this->dataNascimento.getMes();
+}
+// Set dia Pessoas
+void Pessoas::setAno(int ano)
+{
+    this->dataNascimento.setAno(ano);
+}
+// Get ano Pessoas
+int Pessoas::getAno()
+{
+    return this->dataNascimento.getAno();
+}
+// Set nome
+void Pessoas::setNome(string nome)
+{
+    this->nome= nome;
+}
+// Get nome
+string Pessoas::getNome()
+{
+    return this->nome;
+}
+// Set cpf
+void Pessoas::setCpf(string cpf)
+{
+    this->cpf= cpf;
+}
+// Get cpf
+string Pessoas::getCpf()
+{
+    return this->cpf;
+}
+// Class aluno
+class Alunos:Pessoas{
+private:
+    string numeroMatricula;
+public:
+    void setNumeroMatricula(string numeroMatricula);
+    string getNumeroMatricula();
+    static int TAMALUNO;
+};
+int Alunos::TAMALUNO=0;
+// Set número de matrícula
+void Alunos::setNumeroMatricula(string numeroMatricula)
+{
+    this->numeroMatricula= numeroMatricula;
+}
+// Get número de matrícula
+string Alunos::getNumeroMatricula()
+{
+    return this->numeroMatricula;
+}
+// Class professor
+class Professores:Pessoas{
+private:
+    string titulacao;
+    static int TAMPROFESSOR;
+public:
+    void setTitulacao(string titulacao);
+    string getTitulacao();
+};
+int Professores::TAMPROFESSOR=0;
+// Set titulação do professor
+void Professores::setTitulacao(string titulacao)
+{
+    this->titulacao=titulacao;
+}
+// Get titulação do professor
+string Professores::getTitulacao()
+{
+    return titulacao;
+}
+// Escrita das opções
+void instrcoes ()
+{
+    cout << "\n\nBem-vindo, siga as instruções: ";
+    cout << "\n0 - Sair do programa";
+    cout << "\n1 - Cadastrar uma pessoa";
+    cout << "\n2 - Listar todas as pessoas cadastradas";
+    cout << "\n3 - Pesquisar por nome";
+    cout << "\n4 - Pesquisar por CPF";
+    cout << "\n5 - Excluir pessoa";
+    cout << "\n6 - Apagar todas as pessoas cadastradas";
+}
+// Mensagem de fechamento
+void fechamento ()
+{
+    cout << "\n\nObrigado por usar o programa, volte quando precisar!";
+}
+// Escolha da opção
+int escolha()
+{
+    int x;
+    bool erro = true;
+    while (erro)
+    {
+        cout << "\n\nDigite o que deseja: ";
+        cin >> x;
+        if (x >= 0 && x <= 6) erro = false;
+        else cout << "\nSomente números de 0 a 6.\n\a";
+    }//Fim do while
+    return x;
+}
+// Verificando se ano é bissexto
+bool ehbissexto (int ano)
+{
+    bool teste= false;
+    if((ano%4==0 && ano%100!=0)||(ano%400==0)) teste= true;
+    return teste;
+}
+// Validando data
+bool validandoData(int dia, int mes, int ano)
+{
+    bool erro = false;
+    bool bissexto = ehbissexto(ano);
+    //Verificação do mes
+    if (mes<1 || mes>12)
+    {
+        cout << "\nMês inválido\a";
+        erro = true;
+    }
+    //Verificação do ano
+    if (ano<=1900 || ano>2025)
+    {
+        cout << "\nAno inválido\a";
+        erro = true;
+    }
+    //Verificação do dia
+    if(!erro)
+    {
+        if ((mes==1 || mes==3 || mes==5 || mes==7 || mes==8 || mes==10 || mes==12) && (dia<1 || dia>31))
+        {
+            cout << "\nDia inválido\a";
+            erro = true;
+        }
+        else if ((mes==4 || mes==6 || mes==9 || mes==11) && (dia<1 || dia>30))
+        {
+            cout << "\nDia inválido\a";
+            erro = true;
+        }
+        else if (mes==2)
+        {
+            if ((bissexto && (dia<1 || dia>29)) || (!bissexto && (dia<1 || dia>28)))
+            {
+                cout << "\nDia inválido\a";
+                erro = true;
+            }
+        }
+    }
+    return erro;
+}
+// Escrevendo no arquivo
+void escrevendoArquivo(Pessoas *pessoa)
+{
+    ofstream arquivo;
+    if(Pessoas::TAMPES==0) arquivo.open("pessoas.txt");
+    else arquivo.open("pessoas.txt", ios::app);
+    arquivo << "Nome: " << pessoa->getNome() << " - Data de nascimento: " << pessoa->getDia() <<
+    "/" << pessoa->getMes() << "/" << pessoa->getAno() << " - CPF: " << pessoa->getCpf() << endl;
+    arquivo.close();  
+}
+// Conferindo se CPF existe
+bool conferindoCpf(Pessoas *pessoa[], string cpf)
+{
+    for (int i=0; i<Pessoas::TAMPES; i++)
+    {
+        if(pessoa[i]->getCpf()==cpf) return false;
+    }
+    return true;
+}
+// Registrando CPF
+string registrandoCpf(Pessoas *pessoa[])
+{
+    string cpf;
+    bool erro=true;
+    while (erro)
+    {
+        cout << "\nDigite seu cpf[xxx.xxx.xxx-xx]: ";
+        cin.ignore();
+        getline(cin, cpf);
+        if(conferindoCpf(pessoa, cpf)) erro=false;
+        else cout << "\nCPF já registrado\a";
+    }
+    return cpf;
+}
+// Opção 1
+void opcao1(Pessoas *pessoa[])
+{
+    cout << "\n\n1.0 – Voltar ao menu anterior";
+    cout << "\n\n1.1 - Cadastrar rofessor";
+    cout << "\n\n1.2 - Cadastrar Aluno";
+    string nome;
+    cout << "\n\nDigite seu nome: ";
+    cin.ignore();
+    getline(cin, nome);
+    string cpf= registrandoCpf(pessoa);
+    int dia, mes, ano;
+    bool erro = true;
+    while (erro)
+    {
+        cout << "\nDigite sua data de nascimento[xx/xx/xxxx]: ";
+        scanf("%d/%d/%d", &dia, &mes, &ano);
+        if (!validandoData(dia, mes, ano)) erro = false;
+    }
+    int x = Pessoas::TAMPES;
+    pessoa[x] = new Pessoas(nome, dia, mes, ano, cpf);
+    escrevendoArquivo(pessoa[x]);
+    cout << "\nPessoa cadastrada com sucesso!";
+    cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+}
+// Opção 2
+void opcao2()
+{
+    cout << "\n\nLista das pessoas cadastradas: ";
+    if(Pessoas::TAMPES>0)
+    {
+        ifstream arquivo;
+        arquivo.open("pessoas.txt");
+        string linha;
+        while (getline(arquivo, linha))
+        {
+           cout << endl << linha;
+        }
+        cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+    }
+    else cout << "\nNão há nenhuma pessoa cadastrada";
+}
+// Opção 3
+void opcao3(Pessoas *pessoa[])
+{
+    cout << "\n\nPesquisa por nome";
+    string nome;
+    cout << "\nDigite o nome que deseja procurar: ";
+    cin.ignore();
+    getline(cin, nome);
+    bool achou= false;
+    for (int i=0; i<Pessoas::TAMPES; i++)
+    {
+        if(nome==pessoa[i]->getNome()) 
+        {
+            cout << "Nome: " << pessoa[i]->getNome() << " - Data de nascimento: " << pessoa[i]->getDia() <<
+            "/" << pessoa[i]->getMes() << "/" << pessoa[i]->getAno() << " - CPF: " << pessoa[i]->getCpf() << endl;
+            achou=true;
+        }
+    }
+    if(!achou) cout << "\nNão existe ninguém com esse nome";
+}
+// Opção 4
+void opcao4(Pessoas *pessoa[])
+{
+    cout << "\n\nPesquisa por cpf";
+    string cpf;
+    cout << "\nDigite o CPF que deseja procurar: ";
+    cin.ignore();
+    getline(cin, cpf);
+    bool achou= false;
+    for (int i=0; i<Pessoas::TAMPES; i++)
+    {
+        if(cpf==pessoa[i]->getCpf()) 
+        {
+            cout << "Nome: " << pessoa[i]->getNome() << " - Data de nascimento: " << pessoa[i]->getDia() <<
+            "/" << pessoa[i]->getMes() << "/" << pessoa[i]->getAno() << " - CPF: " << pessoa[i]->getCpf() << endl;
+            achou=true;
+        }
+    }
+    if(!achou) cout << "\nNão existe ninguém com esse CPF";
+}
+// Conferindo existência da pessoa
+bool pessquisaCpf(string cpf, Pessoas *pessoa[])
+{
+    for(int i=0; i<Pessoas::TAMPES; i++)
+    {
+        if (pessoa[i]->getCpf() ==cpf) return true;
+    }
+    return false;
+}
+// Encontrando a posição da pessoa 
+int posicao(string cpf, Pessoas *pessoa[])
+{
+    for(int i=0; i<Pessoas::TAMPES; i++)
+    {
+        if (pessoa[i]->getCpf() ==cpf) return i;
+    }
+}
+// Excluindo uma pessoa
+int excluindoPessoa(Pessoas *pessoa[], int x)
+{
+    for (int i=x; i<Pessoas::TAMPES; i++)
+    {
+        pessoa[i]->setNome(pessoa[i+1]->getNome());
+        pessoa[i]->setDia(pessoa[i+1]->getDia());
+        pessoa[i]->setMes(pessoa[i+1]->getMes());
+        pessoa[i]->setAno(pessoa[i+1]->getAno());
+        pessoa[i]->setCpf(pessoa[i+1]->getCpf());
+    }
+    delete(pessoa[Pessoas::TAMPES-1]);
+}
+// Apagando pessoas do arquivo
+void apagandoPessoasArquivo()
+{
+    ofstream arquivo;
+    arquivo.open("pessoas.txt");
+    arquivo.close();
+}
+// Reescrevendo no arquivo
+void reescrevendoArquivo(Pessoas *pessoa[])
+{
+    ofstream arquivo;
+    arquivo.open("pessoas.txt", ios::app);
+    for (int i=0; i<Pessoas::TAMPES; i++)
+    {
+        arquivo << "Nome: " << pessoa[i]->getNome() << " - Data de nascimento: " << pessoa[i]->getDia() <<
+        "/" << pessoa[i]->getMes() << "/" << pessoa[i]->getAno() << " - CPF: " << pessoa[i]->getCpf() << endl;
+    }
+    arquivo.close();
+}
+// Opção 5
+void opcao5(Pessoas *pessoa[])
+{
+    cout << "\n\nExcluir uma pessoa";
+    string cpf;
+    cout << "\nDigite o CPF da pessoa que deseja excluir[0 para sair]: ";
+    cin >> cpf;
+    if(cpf=="0") return; 
+    if(pessquisaCpf(cpf, pessoa))
+    {
+        string teste;
+        cout << "Tem certeza que deseja excluir " << cpf << " ?[S/N]";
+        cin >> teste;
+        if(teste=="S" || teste=="s")
+        {
+            int x= posicao(cpf, pessoa);
+            excluindoPessoa(pessoa, x);
+            apagandoPessoasArquivo();
+            reescrevendoArquivo(pessoa);
+        }
+
+     }
+    else cout << "Não existe ninguém com esse CPF, confira se digitou certo";
+    
+}
+// Opções
+void opcoes(int x, Pessoas *pessoa[])
+{
+    switch (x)
+    {
+    case 1:
+        opcao1(pessoa);
+        break;
+    case 2:
+        opcao2();
+        break;
+    case 3:
+        opcao3(pessoa);
+        break;
+    case 4:
+        opcao4(pessoa);
+        break;
+    case 5:
+        opcao5(pessoa);
+        break;
+    default:
+        break;
+    }
+}// Lendo pessoas do arquivo
+
+void registrandoPessoas(Pessoas *pessoa[])
+{
+    ifstream arquivo("pessoas.txt");
+    if (!arquivo.is_open())
+    {
+        cout << "Arquivo de pessoas não encontrado. Nenhum dado carregado.\n";
+        return;
+    }
+    string linha;
+    char nomeTemp[100], cpfTemp[50];
+    int dia, mes, ano;
+    while (getline(arquivo, linha))
+    {
+        if (sscanf(linha.c_str(), 
+            "Nome: %[^-] - Data de nascimento: %d/%d/%d - CPF: %[^\n]",
+            nomeTemp, &dia, &mes, &ano, cpfTemp) == 5)
+        {
+            int len = strlen(nomeTemp);
+            while (len > 0 && nomeTemp[len-1] == ' ') {
+                nomeTemp[len-1] = '\0';
+                len--;
+            }
+            pessoa[Pessoas::TAMPES] = new Pessoas(string(nomeTemp), dia, mes, ano, string(cpfTemp));
+            if (Pessoas::TAMPES >= _MAX) break; // evitar overflow do array
+        }
+        else
+        {
+            cout << "Linha mal formatada ignorada: " << linha << endl;
+        }
+    }
+    arquivo.close();
+}
+//Main
+int main ()
+{
+    setlocale(LC_ALL, "Portuguese");
+    system("chcp 65001 > nul");
+    Pessoas *pessoa[_MAX];
+    cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+    registrandoPessoas(pessoa);
+    cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+    instrcoes();
+    int x= escolha();
+    while (x!=0)
+    {
+        opcoes(x, pessoa);
+        x= escolha();
+    }
+    fechamento ();
+    cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
+    return 0;
+}
