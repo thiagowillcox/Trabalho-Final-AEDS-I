@@ -1,0 +1,32 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compilar Projeto C++",
+      "type": "shell",
+      "command": "g++",
+      "args": [
+        "main.cpp",
+        "Classes/Alunos/alunos.cpp",
+        "Classes/Data/data.cpp",
+        "Classes/Pessoas/pessoas.cpp",
+        "Classes/Professores/professores.cpp",
+        "FuncoesGerais/geral.cpp",
+        "Opção 1/opcao1.cpp",
+        "Opção 2/opcao2.cpp",
+        "Opção 3/opcao3.cpp",
+        "Opção 4/opcao4.cpp",
+        "Opção 5/opcao5.cpp",
+        "Opção 6/opcao6.cpp",
+        "Opção 7/opcao7.cpp",
+        "-o",
+        "programa.exe"
+      ],
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    }
+  ]
+}
