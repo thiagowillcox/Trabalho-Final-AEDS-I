@@ -1,32 +1,43 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "Compilar Projeto C++",
-      "type": "shell",
-      "command": "g++",
-      "args": [
-        "main.cpp",
-        "Classes/Alunos/alunos.cpp",
-        "Classes/Data/data.cpp",
-        "Classes/Pessoas/pessoas.cpp",
-        "Classes/Professores/professores.cpp",
-        "FuncoesGerais/geral.cpp",
-        "Opção 1/opcao1.cpp",
-        "Opção 2/opcao2.cpp",
-        "Opção 3/opcao3.cpp",
-        "Opção 4/opcao4.cpp",
-        "Opção 5/opcao5.cpp",
-        "Opção 6/opcao6.cpp",
-        "Opção 7/opcao7.cpp",
-        "-o",
-        "programa.exe"
-      ],
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    }
-  ]
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build e Run Teste.exe", // Nome que aparecerá no VS Code
+            "type": "shell",
+            "command": "g++", // Comando principal
+            "args": [
+                "main.cpp",
+                "ClassesCPP/alunos.cpp",
+                "ClassesCPP/data.cpp",
+                "ClassesCPP/pessoas.cpp",
+                "ClassesCPP/professores.cpp",
+                "FuncoesGeraisCPP/geral.cpp",
+                "OpcoesCPP/opcao1.cpp",
+                "OpcoesCPP/opcao2.cpp",
+                "OpcoesCPP/opcao3.cpp",
+                "OpcoesCPP/opcao4.cpp",
+                "OpcoesCPP/opcao5.cpp",
+                "OpcoesCPP/opcao6.cpp",
+                "OpcoesCPP/opcao7.cpp",
+                "-Wall",
+                "-o",
+                "teste.exe"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": "$gcc", // Para o VS Code reconhecer erros do GCC
+            "detail": "Compila todos os arquivos e cria teste.exe"
+        },
+        {
+            "label": "Executar Teste.exe", // Nome para a tarefa de execução
+            "type": "shell",
+            "command": "./teste.exe", // Comando para executar o executável
+            "group": "test", // Pode ser 'test' ou 'none'
+            "dependsOn": "Build e Run Teste.exe", // Garante que a compilação rode primeiro
+            "problemMatcher": [],
+            "detail": "Executa o programa teste.exe no terminal integrado"
+        }
+    ]
 }

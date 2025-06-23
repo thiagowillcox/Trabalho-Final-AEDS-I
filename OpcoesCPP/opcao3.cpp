@@ -1,33 +1,43 @@
 // Bibliotecas
 #include <iostream>
 using namespace std;
+#include <limits>
 // Bibliotecas gerais
 #include "../OpcoesHPP/opcao3.hpp"
 #include "../ClassesHPP/alunos.hpp"
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
 
+    /*PROFESSOR*/
+
 // Pesquisar Professor por nome
 void pesquisarProfessorNome (Professores *professor[])
 {
     cout << "\n\nPesquisar professor por nome";
     string nome;
+    
     cout << "\nDigite o nome do professor que deseja procurar: ";
     cin.ignore();
     getline(cin, nome);
     bool achou= false;
     for (int i=0; i<Professores::TAMPROFESSOR; i++)
     {
-        if(nome==professor[i]->getNome()) 
+        if(professor[i] != nullptr && nome == professor[i]->getNome())
         {
-            cout << "Nome: " << professor[i]->getNome() << " - Data de nascimento: " << professor[i]->getDia() <<
-            "/" << professor[i]->getMes() << "/" << professor[i]->getAno() << " - CPF: " << professor[i]->getCpf()  
-            << " - Título: " << professor[i]->getTitulacao() << endl;
-            achou=true;
+            cout << "\nNome: " << professor[i]->getNome()
+                 << " - Data de nascimento: " << professor[i]->getDia()
+                 << "/" << professor[i]->getMes()
+                 << "/" << professor[i]->getAno()
+                 << " - CPF: " << professor[i]->getCpf()
+                 << " - Título: " << professor[i]->getTitulacao() << endl;
+            achou = true;
         }
     }
     if(!achou) cout << "\nNão existe ninguém com esse nome";
 }
+
+    /*ALUNO*/
+
 // Pesquisar Aluno por nome
 void pesquisarAlunoNome(Alunos *aluno[])
 {
@@ -39,16 +49,22 @@ void pesquisarAlunoNome(Alunos *aluno[])
     bool achou= false;
     for (int i=0; i<Alunos::TAMALUNO; i++)
     {
-        if(nome==aluno[i]->getNome()) 
+        if(aluno[i] != nullptr && nome == aluno[i]->getNome())
         {
-            cout << "Nome: " << aluno[i]->getNome() << " - Data de nascimento: " << aluno[i]->getDia() <<
-            "/" << aluno[i]->getMes() << "/" << aluno[i]->getAno() << " - CPF: " << aluno[i]->getCpf() << " - Matrícula: " 
-            << aluno[i]->getNumeroMatricula() << endl;
-            achou=true;
+            cout << "\nNome: " << aluno[i]->getNome()
+                 << " - Data de nascimento: " << aluno[i]->getDia()
+                 << "/" << aluno[i]->getMes()
+                 << "/" << aluno[i]->getAno()
+                 << " - CPF: " << aluno[i]->getCpf()
+                 << " - Matrícula: " << aluno[i]->getNumeroMatricula() << endl;
+            achou = true;
         }
     }
     if(!achou) cout << "\nNão existe ninguém com esse nome";
 }
+
+    /*GERAL*/
+    
 // Opções opção 3
 void opcoesOpcao3(int x, Alunos *aluno[], Professores *professor[])
 {

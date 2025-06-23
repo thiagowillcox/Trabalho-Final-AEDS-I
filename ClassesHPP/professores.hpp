@@ -31,7 +31,10 @@ public:
     }
     ~Professores()
     {
-        Professores::TAMPROFESSOR--;
+        if (Professores::TAMPROFESSOR > 0) 
+        { 
+            Professores::TAMPROFESSOR--;
+        }
     }
 };
 

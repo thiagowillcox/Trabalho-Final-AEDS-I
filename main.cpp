@@ -5,13 +5,11 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdlib>
-
 // Incluindo arquivos
 #include "ClassesHPP/pessoas.hpp"
 #include "ClassesHPP/alunos.hpp"
 #include "ClassesHPP/professores.hpp"
 #include "FuncoesGeraisHPP/geral.hpp"
-
 // Definições
 using namespace std;
 #define _MAX 100
@@ -23,6 +21,12 @@ int main ()
     Pessoas *pessoa[_MAX];
     Alunos *aluno[_MAX];
     Professores *professor[_MAX];
+    for (int i = 0; i < _MAX; ++i)
+    {
+        pessoa[i] = nullptr;
+        aluno[i] = nullptr;
+        professor[i] = nullptr;
+    }
     registrandoPessoas(pessoa, aluno, professor);
     instrcoes();
     int x= escolha();

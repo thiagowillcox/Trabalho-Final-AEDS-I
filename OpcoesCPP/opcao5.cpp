@@ -3,165 +3,178 @@
 using namespace std;
 // Bibliotecas gerais
 #include <fstream>
+#include <limits>
 // Incluindo arquivos
 #include "../OpcoesHPP/opcao5.hpp"
 #include "../ClassesHPP/alunos.hpp"
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
 
-
-
-// Pesquisa CPF do professor
-bool pessquisaCpfProfessor(string cpf, Professores *professor[])
+/*PROFESSORES*/
+bool pesquisaCpfProfessor(string cpf, Professores *professor[])
 {
-    for(int i=0; i<Professores::TAMPROFESSOR; i++)
+    for(int i = 0; i < Professores::TAMPROFESSOR; i++)
     {
-        if (professor[i]->getCpf() ==cpf) return true;
+        if (professor[i] != nullptr && professor[i]->getCpf() == cpf) return true;
     }
     return false;
 }
-// Encontrando a posição do professor 
+
 int posicaoProfessor(string cpf, Professores *professor[])
 {
-    for(int i=0; i<Professores::TAMPROFESSOR; i++)
+    for(int i = 0; i < Professores::TAMPROFESSOR; i++)
     {
-        if (professor[i]->getCpf() ==cpf) return i;
+        if (professor[i] != nullptr && professor[i]->getCpf() == cpf) return i;
     }
     return -1;
 }
-// Excluindo o professor
+
 void excluindoProfessor(Professores *professor[], int x)
 {
-    for (int i=x; i<Professores::TAMPROFESSOR; i++)
-    {
-        professor[i]->setNome(professor[i+1]->getNome());
-        professor[i]->setDia(professor[i+1]->getDia());
-        professor[i]->setMes(professor[i+1]->getMes());
-        professor[i]->setAno(professor[i+1]->getAno());
-        professor[i]->setCpf(professor[i+1]->getCpf());
+    if (professor[x] != nullptr) {
+        delete professor[x];
+        professor[x] = nullptr;
     }
-    delete(professor[Professores::TAMPROFESSOR-1]);
+    for (int i = x; i < Professores::TAMPROFESSOR - 1; i++)
+    {
+        professor[i] = professor[i+1];
+    }
+    professor[Professores::TAMPROFESSOR - 1] = nullptr;
+
 }
-// Apagando professor do arquivo
 void apagandoProfessoresArquivo()
 {
     ofstream arquivo;
     arquivo.open("professores.txt");
     arquivo.close();
 }
-// Reescrevendo no arquivo de professores
+
 void reescrevendoArquivoProfessor(Professores *professor[])
 {
     ofstream arquivo;
     arquivo.open("professores.txt", ios::app);
     for (int i=0; i<Professores::TAMPROFESSOR; i++)
     {
-        arquivo << "Nome: " << professor[i]->getNome() << " - Data de nascimento: " << professor[i]->getDia() <<
-        "/" << professor[i]->getMes() << "/" << professor[i]->getAno() << " - CPF: " << professor[i]->getCpf() 
-        << " - Título: " << professor[i]->getTitulacao() << endl;
+        arquivo << endl << professor[i]->getNome() << endl
+        << professor[i]->getDia() << endl
+        << professor[i]->getMes() << endl
+        << professor[i]->getAno() << endl
+        << professor[i]->getCpf() << endl
+        << professor[i]->getTitulacao() << endl
+        << "xxxxx" << endl;
     }
     arquivo.close();
 }
-// Excluir professor
+
 void excluirProfessor(Professores *professor[])
 {
-    cout << "\n\nExcluir um aluno";
+    cout << "\n\nExcluir um professor";
     string cpf;
-    cout << "\nDigite o CPF do aluno que deseja excluir[0 para sair]: ";
+    cout << "\nDigite o CPF do professor que deseja excluir[0 para sair]: ";
     cin >> cpf;
-    if(cpf=="0") return; 
-    if(pessquisaCpfProfessor(cpf, professor))
+    if(cpf=="0") return;
+    if(pesquisaCpfProfessor(cpf, professor))
     {
         string teste;
         cout << "Tem certeza que deseja excluir " << cpf << " ?[S/N]";
         cin >> teste;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if(teste=="S" || teste=="s")
         {
-            int x= posicaoProfessor(cpf, professor);
+            int x = posicaoProfessor(cpf, professor);
             excluindoProfessor(professor, x);
             apagandoProfessoresArquivo();
             reescrevendoArquivoProfessor(professor);
+            cout << "\nProfessor excluido com sucesso!";
         }
-
-     }
+    }
     else cout << "Não existe ninguém com esse CPF, confira se digitou certo";
 }
-// Pesquisa CPF do aluno
-bool pessquisaCpfAluno(string cpf, Alunos *aluno[])
+
+/*ALUNOS*/
+
+bool pesquisaCpfAluno(string cpf, Alunos *aluno[])
 {
-    for(int i=0; i<Alunos::TAMALUNO; i++)
+    for(int i = 0; i < Alunos::TAMALUNO; i++)
     {
-        if (aluno[i]->getCpf() ==cpf) return true;
+        if (aluno[i] != nullptr && aluno[i]->getCpf() == cpf) return true;
     }
     return false;
 }
-// Encontrando a posição do aluno 
+
 int posicaoAluno(string cpf, Alunos *aluno[])
 {
-    for(int i=0; i<Alunos::TAMALUNO; i++)
+    for(int i = 0; i < Alunos::TAMALUNO; i++)
     {
-        if (aluno[i]->getCpf() ==cpf) return i;
+        if (aluno[i] != nullptr && aluno[i]->getCpf() == cpf) return i;
     }
     return -1;
 }
-// Excluindo o aluno
+
 void excluindoAluno(Alunos *aluno[], int x)
 {
-    for (int i=x; i<Alunos::TAMALUNO; i++)
-    {
-        aluno[i]->setNome(aluno[i+1]->getNome());
-        aluno[i]->setDia(aluno[i+1]->getDia());
-        aluno[i]->setMes(aluno[i+1]->getMes());
-        aluno[i]->setAno(aluno[i+1]->getAno());
-        aluno[i]->setCpf(aluno[i+1]->getCpf());
+    if (aluno[x] != nullptr) {
+        delete aluno[x];
+        aluno[x] = nullptr;
     }
-    delete(aluno[Alunos::TAMALUNO-1]);
+    for (int i = x; i < Alunos::TAMALUNO - 1; i++)
+    {
+        aluno[i] = aluno[i+1];
+    }
+    aluno[Alunos::TAMALUNO - 1] = nullptr;
 }
-// Apagando aluno do arquivo
+
 void apagandoAlunosArquivo()
 {
     ofstream arquivo;
     arquivo.open("alunos.txt");
     arquivo.close();
 }
-// Reescrevendo no arquivo de alunos
+
 void reescrevendoArquivoAluno(Alunos *aluno[])
 {
     ofstream arquivo;
     arquivo.open("alunos.txt", ios::app);
     for (int i=0; i<Alunos::TAMALUNO; i++)
     {
-        arquivo << "Nome: " << aluno[i]->getNome() << " - Data de nascimento: " << aluno[i]->getDia() <<
-        "/" << aluno[i]->getMes() << "/" << aluno[i]->getAno() << " - CPF: " << aluno[i]->getCpf() 
-        << " - Matrícula: " << aluno[i]->getNumeroMatricula() << endl;
+        arquivo << aluno[i]->getNome() << endl
+        << aluno[i]->getDia() << endl
+        << aluno[i]->getMes() << endl
+        << aluno[i]->getAno() << endl
+        << aluno[i]->getCpf() << endl
+        << aluno[i]->getNumeroMatricula() << endl
+        << "xxxxx" << endl;
     }
     arquivo.close();
 }
-// Excluir aluno
+
 void excluirAluno(Alunos *aluno[])
 {
     cout << "\n\nExcluir um aluno";
     string cpf;
     cout << "\nDigite o CPF do aluno que deseja excluir[0 para sair]: ";
     cin >> cpf;
-    if(cpf=="0") return; 
-    if(pessquisaCpfAluno(cpf, aluno))
+    if(cpf=="0") return;
+    if(pesquisaCpfAluno(cpf, aluno))
     {
         string teste;
-        cout << "Tem certeza que deseja excluir " << cpf << " ?[S/N]";
+        cout << "Tem certeza que deseja excluir " << cpf << " ?[S/N]: ";
         cin >> teste;
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if(teste=="S" || teste=="s")
         {
-            int x= posicaoAluno(cpf, aluno);
+            int x = posicaoAluno(cpf, aluno);
             excluindoAluno(aluno, x);
             apagandoAlunosArquivo();
             reescrevendoArquivoAluno(aluno);
+            cout << "\nAluno excluido com sucesso!";
         }
-
-     }
+    }
     else cout << "Não existe ninguém com esse CPF, confira se digitou certo";
 }
-// Opções opção 5
+
+/*CÓDIGOL GERAL*/
+
 void opcoesOpcao5(int x, Alunos *aluno[], Professores *professor[])
 {
     switch (x)
@@ -178,27 +191,26 @@ void opcoesOpcao5(int x, Alunos *aluno[], Professores *professor[])
         break;
     }
 }
-// Escolha opção 5
+
 int escolhaOpcao5()
 {
     int x;
-    bool erro=true;
+    bool erro = true;
     while(erro)
     {
         cout << "\n\nDigite o que deseja: ";
         cin >> x;
-        if(x>=0 && x<=2) erro= false;
+        if(x>=0 && x<=2) erro = false;
         else cout << "Somente números de 0 a 2\a";
     }
     return x;
 }
-// Opção 5
+
 void opcao5(Alunos *aluno[], Professores *professor[])
 {
     cout << "\n\n5.0 – Voltar ao menu anterior[0]";
     cout << "\n5.1 - Excluir professor pelo CPF[1]";
     cout << "\n5.2 - Excluir aluno pelo CPF[2]";
-    int x= escolhaOpcao5();
+    int x = escolhaOpcao5();
     opcoesOpcao5(x, aluno, professor);
 }
-

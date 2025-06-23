@@ -3,6 +3,8 @@
 using namespace std;
 // Bibliotecas gerais
 #include <fstream>
+#include <string>
+#include <limits>
 // Bibliotecas gerais
 #include <fstream>
 // Incluindo arquivos
@@ -21,6 +23,7 @@ using namespace std;
 // Escrita das opções
 void instrcoes ()
 {
+    cout << "\n\n--- MENU PRINCIPAL ---";
     cout << "\n\n0 - Sair do programa";
     cout << "\n1 - Cadastrar uma pessoa";
     cout << "\n2 - Listar todas as pessoas cadastradas";
@@ -28,7 +31,9 @@ void instrcoes ()
     cout << "\n4 - Pesquisar por CPF";
     cout << "\n5 - Excluir pessoa";
     cout << "\n6 - Apagar todas as pessoas cadastradas";
-}
+    cout << "\n7 - Aniversariantes do mês";
+    cout << "\n----------------------";
+} 
 // Mensagem de fechamento
 void fechamento ()
 {
@@ -46,6 +51,7 @@ int escolha()
         if (x >= 0 && x <= 7) erro = false;
         else cout << "\nSomente números de 0 a 7.\n\a";
     }//Fim do while
+    
     return x;
 }
 // Opções
@@ -57,7 +63,7 @@ void opcoes(int x, Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
         opcao1(pessoa, aluno, professor);
         break;
     case 2:
-        opcao2();
+        opcao2(aluno, professor);
         break;
     case 3:
         opcao3(aluno, professor);
@@ -82,40 +88,34 @@ void opcoes(int x, Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
 void lerArquivoAlunos(Alunos *aluno[], Pessoas *pessoa[])
 {
     ifstream arqAluno("alunos.txt");
-    if (arqAluno.is_open()) {
+    if (arqAluno.is_open())
+    {
         string linha;
-        while (getline(arqAluno, linha)) {
-            if (linha.find("ALUNO->") != string::npos) {
-                // Extrair dados do aluno
-                size_t posNome = linha.find("Nome: ") + 6;
-                size_t posData = linha.find(" - Data de nascimento: ");
-                string nome = linha.substr(posNome, posData - posNome);
-                
-                size_t posDia = posData + 23;
-                size_t posBarra1 = linha.find("/", posDia);
-                int dia = stoi(linha.substr(posDia, posBarra1 - posDia));
-                
-                size_t posMes = posBarra1 + 1;
-                size_t posBarra2 = linha.find("/", posMes);
-                int mes = stoi(linha.substr(posMes, posBarra2 - posMes));
-                
-                size_t posAno = posBarra2 + 1;
-                size_t posCpf = linha.find(" - CPF: ", posAno);
-                int ano = stoi(linha.substr(posAno, posCpf - posAno));
-                
-                size_t posCpfVal = posCpf + 8;
-                size_t posMatricula = linha.find(" - Matrícula: ", posCpfVal);
-                string cpf = linha.substr(posCpfVal, posMatricula - posCpfVal);
-                
-                size_t posMatriculaVal = posMatricula + 14;
-                string matricula = linha.substr(posMatriculaVal);
-                
-                // Criar novo aluno
-                aluno[Alunos::TAMALUNO] = new Alunos(nome, dia, mes, ano, cpf, matricula);
-                pessoa[Pessoas::TAMPES] = aluno[Alunos::TAMALUNO];
-                Alunos::TAMALUNO++;
-                Pessoas::TAMPES++;
-            }
+        int dia, mes, ano;
+        string nome, cpf, matricula;
+        int i=0;
+        while (getline(arqAluno, linha)) 
+        {
+            // Nome
+            nome= linha;
+            // Data
+            getline(arqAluno, linha);
+            dia = std::stoi(linha);
+            getline(arqAluno, linha);
+            mes = std::stoi(linha);
+            getline(arqAluno, linha);
+            ano = std ::stoi(linha);
+            // CPF
+            getline(arqAluno, linha);
+            cpf= linha;
+            // Matrícula
+            getline(arqAluno, linha);
+            matricula= linha;
+            // Separador
+            getline(arqAluno, linha);
+            // Criando aluno
+            aluno[i]= new Alunos(nome, dia, mes, ano, cpf, matricula);
+            i++;
         }
         arqAluno.close();
     }
@@ -124,40 +124,34 @@ void lerArquivoAlunos(Alunos *aluno[], Pessoas *pessoa[])
 void lerArquivoProfessores(Professores *professor[], Pessoas *pessoa[])
 {
     ifstream arqProf("professores.txt");
-    if (arqProf.is_open()) {
+    if (arqProf.is_open())
+    {
         string linha;
-        while (getline(arqProf, linha)) {
-            if (linha.find("PROFESSOR->") != string::npos) {
-                // Extrair dados do professor
-                size_t posNome = linha.find("Nome: ") + 6;
-                size_t posData = linha.find(" - Data de nascimento: ");
-                string nome = linha.substr(posNome, posData - posNome);
-                
-                size_t posDia = posData + 23;
-                size_t posBarra1 = linha.find("/", posDia);
-                int dia = stoi(linha.substr(posDia, posBarra1 - posDia));
-                
-                size_t posMes = posBarra1 + 1;
-                size_t posBarra2 = linha.find("/", posMes);
-                int mes = stoi(linha.substr(posMes, posBarra2 - posMes));
-                
-                size_t posAno = posBarra2 + 1;
-                size_t posCpf = linha.find(" - CPF: ", posAno);
-                int ano = stoi(linha.substr(posAno, posCpf - posAno));
-                
-                size_t posCpfVal = posCpf + 8;
-                size_t posTitulo = linha.find(" - Título: ", posCpfVal);
-                string cpf = linha.substr(posCpfVal, posTitulo - posCpfVal);
-                
-                size_t posTituloVal = posTitulo + 11;
-                string titulo = linha.substr(posTituloVal);
-                
-                // Criar novo professor
-                professor[Professores::TAMPROFESSOR] = new Professores(nome, dia, mes, ano, cpf, titulo);
-                pessoa[Pessoas::TAMPES] = professor[Professores::TAMPROFESSOR];
-                Professores::TAMPROFESSOR++;
-                Pessoas::TAMPES++;
-            }
+        int dia, mes, ano;
+        string nome, cpf, titulacao;
+        int i=0;
+        while (getline(arqProf, linha)) 
+        {
+            // Nome
+            nome= linha;
+            // Data
+            getline(arqProf, linha);
+            dia = std::stoi(linha);
+            getline(arqProf, linha);
+            mes = std::stoi(linha);
+            getline(arqProf, linha);
+            ano = std ::stoi(linha);
+            // CPF
+            getline(arqProf, linha);
+            cpf= linha;
+            // Matrícula
+            getline(arqProf, linha);
+            titulacao= linha;
+            // Separador
+            getline(arqProf, linha);
+            // Criando aluno
+            professor[i]= new Professores(nome, dia, mes, ano, cpf, titulacao);
+            i++;
         }
         arqProf.close();
     }
@@ -165,22 +159,26 @@ void lerArquivoProfessores(Professores *professor[], Pessoas *pessoa[])
 // Lendo pessoas do arquivo
 void registrandoPessoas(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[]) 
 {
-    // Limpar contadores estáticos
-    Pessoas::TAMPES = 0;
-    Alunos::TAMALUNO = 0;
-    Professores::TAMPROFESSOR = 0;
     lerArquivoAlunos(aluno, pessoa);
     lerArquivoProfessores(professor, pessoa);
 }
 // Liberar memória
-void liberarMemoria(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[]) {
-    for (int i = 0; i < Pessoas::TAMPES; i++) {
-        delete pessoa[i];
-    }
+void liberarMemoria(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[]) 
+{
     for (int i = 0; i < Alunos::TAMALUNO; i++) {
-        delete aluno[i];
+        if (aluno[i] != nullptr) 
+        {
+            delete aluno[i];
+            aluno[i] = nullptr;
+        }
     }
     for (int i = 0; i < Professores::TAMPROFESSOR; i++) {
-        delete professor[i];
+        if (professor[i] != nullptr) 
+        {
+            delete professor[i];
+            professor[i] = nullptr;
+        }
     }
+    Professores::TAMPROFESSOR = 0;
+    Pessoas::TAMPES = 0;
 }

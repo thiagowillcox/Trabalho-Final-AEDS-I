@@ -41,12 +41,16 @@ public:
     }
     void setNome(string nome);
     string getNome();
+
     void setDia(int dia);
     int getDia();
+
     void setMes(int mes);
     int getMes();
+
     void setAno(int ano);
     int getAno();
+    
     void setCpf(string cpf);
     string getCpf();
 };

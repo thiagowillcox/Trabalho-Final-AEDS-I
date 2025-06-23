@@ -3,12 +3,63 @@
 using namespace std;
 // Bibliotecas gerais
 #include <fstream>
+#include <limits>
 // Incluindo arquivos
 #include "../OpcoesHPP/opcao2.hpp"
 #include "../ClassesHPP/alunos.hpp"
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
 
+    /*PROFESSORES*/
+
+// Listar professores
+void listarProfessores(Professores *professor[])
+{
+    if (Professores::TAMPROFESSOR==0) cout << "\nNão existe nenhum professor cadastrado";
+    else
+    {
+        cout << "\n--- LISTA DE PROFESSORES ---";
+        for (int i=0; i<Professores::TAMPROFESSOR; i++)
+        {
+            if (professor[i] != nullptr) 
+            {
+                cout << "\nNome: " << professor[i]->getNome()
+                     << " - Data de nascimento: " << professor[i]->getDia()
+                     << "/" << professor[i]->getMes()
+                     << "/" << professor[i]->getAno()
+                     << " - CPF: " << professor[i]->getCpf()
+                     << " - Título: " << professor[i]->getTitulacao();
+            }
+        }
+    }
+    cout << "\n----------------------------\n";
+}
+
+    /*ALUNOS*/
+
+// Listar alunos
+void listarAluno(Alunos *aluno[])
+{    
+    if (Alunos::TAMALUNO==0) cout << "\nNão existe nenhum aluno cadastrado";
+    else
+    {
+        cout << "\n--- LISTA DE ALUNOS ---";
+        for (int i=0; i<Alunos::TAMALUNO; i++)
+        {
+            if (aluno[i] != nullptr) 
+            {
+                cout << "\nNome: " << aluno[i]->getNome()
+                     << " - Data de nascimento: " << aluno[i]->getDia()
+                     << "/" << aluno[i]->getMes()
+                     << "/" << aluno[i]->getAno()
+                     << " - CPF: " << aluno[i]->getCpf()
+                     << " - Matrícula: " << aluno[i]->getNumeroMatricula();
+            }
+        }
+        cout << "\n-----------------------\n";
+    } 
+}
+    /*GERAL*/
 
 // Escolha opção 2
 int escolhaOpcao2()
@@ -24,74 +75,29 @@ int escolhaOpcao2()
     }
     return x;
 }
-// Listar professores
-void listarProfessores()
-{
-    ifstream arquivo("professores.txt");
-    if (!arquivo.is_open())
-    {
-        cout << "Arquivo de professores não encontrado. Nenhum dado carregado.\n";
-        return;
-    }
-    string linha;
-    if (Professores::TAMPROFESSOR!=0)
-    {
-        cout << "\n\nLista de professores cadastrados: ";
-        while (getline(arquivo,linha))
-        {
-            cout << endl << linha;
-        }
-            cout << "\nTotal de professores: " << Professores::TAMPROFESSOR;
-    }
-    else cout << "\nNão há nenhum professor cadastrado";  
-}
-// Listar alunos
-void listarAluno()
-{    
-    ifstream arquivo("alunos.txt");
-    if (!arquivo.is_open())
-    {
-        cout << "Arquivo de alunos não encontrado. Nenhum dado carregado.\n";
-        return;
-    }
-    string linha;
-    if (Alunos::TAMALUNO!=0)
-    {
-        cout << "\n\nLista de alunos cadastrados: ";
-        while (getline(arquivo,linha))
-        {
-            cout << endl << linha;
-        }
-            cout << "\nTotal de alunos: " << Alunos::TAMALUNO;
-    }
-    else cout << "\nNão há nenhum anluno cadastrado";  
-}
 // Opções opção 2
-void opcoesOpcao2(int x)
+void opcoesOpcao2(int x, Alunos *aluno[], Professores *professor[])
 {
     switch (x)
     {
     case 0:
         break;
     case 1:
-        listarProfessores();
+        listarProfessores(professor);
         break;
     case 2:
-        listarAluno();
+        listarAluno(aluno);
         break;
     default:
         break;
     }
 }
 // Opção 2
-void opcao2()
+void opcao2(Alunos *aluno[], Professores *professor[])
 {
     cout << "\n\n2.0 – Voltar ao menu anterior[0]";
     cout << "\n2.1 - Listar Professores[1]";
     cout << "\n2.2 - Listar Alunos[2]";
     int x= escolhaOpcao2();
-    opcoesOpcao2(x);
+    opcoesOpcao2(x, aluno, professor);
 }
-
-
-

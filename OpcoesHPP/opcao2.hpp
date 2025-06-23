@@ -8,7 +8,7 @@ using namespace std;
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
 
-void opcao2();
+void opcao2(Alunos *aluno[], Professores *professor[]);
 void opcoesOpcao2(int x);
 void listarAluno();
 void listarProfessores();

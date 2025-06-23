@@ -3,11 +3,14 @@
 using namespace std;
 // Bibliotecas gerais
 #include <fstream>
+#include <limits> 
 // Incluindo arquivos
 #include "../OpcoesHPP/opcao6.hpp"
 #include "../ClassesHPP/alunos.hpp"
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
+
+    /*PROFESSORES*/
 
 // Deletar todos os professores
 void deletarTodosProfessores(Professores *professor[])
@@ -21,6 +24,9 @@ void deletarTodosProfessores(Professores *professor[])
     }
     cout << "\n\nPessoas apagadas com sucesso";
 }
+
+    /*ALUNOS*/
+
 // Deletar todos os alunos
 void deletarTodosAlunos(Alunos *aluno[])
 {
@@ -33,6 +39,9 @@ void deletarTodosAlunos(Alunos *aluno[])
     }
     cout << "\n\nPessoas apagadas com sucesso";
 }
+
+    /*GERAL*/
+
 // Opções opção 6
 void opcoesOpcao6(int x, Alunos *aluno[], Professores *professor[])
 {

@@ -31,7 +31,10 @@ public:
     }
     ~Alunos()
     {
-        Alunos::TAMALUNO--;
+        if (Alunos::TAMALUNO > 0)
+        {
+            Alunos::TAMALUNO--;
+        }
     }
 };
 
