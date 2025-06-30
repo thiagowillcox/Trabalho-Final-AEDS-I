@@ -8,107 +8,91 @@ using namespace std;
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
 
-    /*PROFESSORES*/
-
-void professoresAniversariantesMes(Professores *professor[])
+void aniversariantesMes(int *mes, Professores *professor[], int *aniversariantes)
 {
-    int mes = pegandoMesAniversariante();
-    int aniversariantes = 0;
     if (Professores::TAMPROFESSOR == 0)
     {
         cout << "\nNão existe nenhum professor cadastrado.";
         return;
     }
-    cout << "\n--- PROFESSORES ANIVERSARIANTES DO MÊS " << mes << " ---";
+    cout << "\n--- PROFESSORES ANIVERSARIANTES DO MÊS " << *mes << " ---";
     for (int i = 0; i < Professores::TAMPROFESSOR; i++)
     {
-        if (professor[i] != nullptr && professor[i]->getMes() == mes)
+        if (professor[i] != nullptr && professor[i]->getMes() == *mes)
         {
-            aniversariantes++;
-            cout << "\nPROFESSOR-> Nome: " << professor[i]->getNome()
+            *aniversariantes++;
+            cout << "\nNome: " << professor[i]->getNome()
                  << " - Data de nascimento: " << professor[i]->getDia()
                  << "/" << professor[i]->getMes()
                  << "/" << professor[i]->getAno()
-                 << " - CPF: " << professor[i]->getCpf()
-                 << " - Título: " << professor[i]->getTitulacao();
+                 << " - CPF: " << professor[i]->getCpf();
         }
     }
     cout << "\n-------------------------------------------------------\n";
-    if (aniversariantes == 0)
-        cout << "\nNão existe nenhum professor aniversariante nesse mês";
-    else
-        cout << "\nTotal de professores aniversariantes do mês: " << aniversariantes;
 }
 
-/*ALUNOS*/
-
-void alunosAniversariantesMes(Alunos *aluno[])
+void aniversariantesMes(int *mes, Alunos *aluno[], int *aniversariantes)
 {
-    int mes = pegandoMesAniversariante();
-    int aniversariantes = 0;
     if (Alunos::TAMALUNO == 0)
     {
         cout << "\nNão existe nenhum aluno cadastrado.";
         return;
     }
-    cout << "\n--- ALUNOS ANIVERSARIANTES DO MÊS " << mes << " ---";
+    cout << "\n--- ALUNOS ANIVERSARIANTES DO MÊS " << *mes << " ---";
     for (int i = 0; i < Alunos::TAMALUNO; i++)
     {
-        if (aluno[i] != nullptr && aluno[i]->getMes() == mes)
+        if (aluno[i] != nullptr && aluno[i]->getMes() == *mes)
         {
-            aniversariantes++;
-            cout << "\nALUNO-> Nome: " << aluno[i]->getNome()
+            *aniversariantes++;
+            cout << "\nNome: " << aluno[i]->getNome()
                  << " - Data de nascimento: " << aluno[i]->getDia()
                  << "/" << aluno[i]->getMes()
                  << "/" << aluno[i]->getAno()
-                 << " - CPF: " << aluno[i]->getCpf()
-                 << " - Matrícula: " << aluno[i]->getNumeroMatricula();
+                 << " - CPF: " << aluno[i]->getCpf();
         }
     }
-    cout << "\n-----------------------------------------------------\n";
-    if (aniversariantes == 0)
-        cout << "\nNão existe nenhum aluno aniversariante nesse mês";
-    else
-        cout << "\nTotal de alunos aniversariantes do mês: " << aniversariantes;
+    cout << "\n-------------------------------------------------------\n";
 }
 
-/*GERAL*/
-
-int pegandoMesAniversariante()
+void separacao(int *mes, Alunos *aluno[], Professores *professor[])
 {
-    int mes;
-    while (true)
+    int aniversariantes= 0;
+    aniversariantesMes(mes, aluno, &aniversariantes);
+    aniversariantesMes(mes, professor, &aniversariantes);
+    if (aniversariantes==0) cout << "\nNão tem nenhum aniversariante nesse mês";
+    else cout << "\nExistem " << aniversariantes << " nesse mês";
+}
+
+int pegandoMesAniversariante(int *mes)
+{
+    bool teste= true;
+    while (teste)
     {
         cout << "\nDigite o mês que deseja: ";
-        cin >> mes;
+        cin >> *mes;
         if (cin.fail())
         {
             cout << "\nEntrada inválida. Por favor, digite um número.\a";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-        else if (mes >= 1 && mes <= 12)
-        {
-            return mes;
-        }
-        else
-        {
-            cout << "\nMês inválido[1 a 12]\a";
-        }
+        else if (*mes >= 1 && *mes <= 12) teste= false;
+        else cout << "\nMês inválido[1 a 12]\a";
     }
+    return *mes;
 }
 
-void opcoesOpcao7(int x, Alunos *aluno[], Professores *professor[])
+void opcoesOpcao7(int x, int *mes, Alunos *aluno[], Professores *professor[])
 {
     switch (x)
     {
     case 0:
         break;
     case 1:
-        professoresAniversariantesMes(professor);
+        pegandoMesAniversariante(mes);
         break;
     case 2:
-        alunosAniversariantesMes(aluno);
+        separacao(mes, aluno, professor);
         break;
     default:
         break;
@@ -131,11 +115,17 @@ int escolhaOpcao7()
     return x;
 }
 
-void opcao7(Alunos *aluno[], Professores *professor[])
+void opcao7escolha( int *mes, Alunos *aluno[], Professores *professor[])
 {
     cout << "\n\n7.0 – Voltar ao menu anterior[0]";
-    cout << "\n7.1 - Listar os Professores aniversariantes do mês[1]";
-    cout << "\n7.2 - Listar os Alunos aniversariantes do mês[2]";
+    cout << "\n7.1 - Informar o mês a ser pesquisado[1]";
+    cout << "\n7.2 - Listar aniversáriantes do mês[2]";
     int x = escolhaOpcao7();
-    opcoesOpcao7(x, aluno, professor);
+    opcoesOpcao7(x, mes, aluno, professor);
+}
+
+void opcao7(Alunos *aluno[], Professores *professor[])
+{
+    int x=0;
+    opcao7escolha( &x, aluno, professor);
 }

@@ -1,7 +1,8 @@
-#ifndef OPCAO1_H  
+#ifndef OPCAO1_H 
 #define OPCAO1_H
 // Bibliotecas
 #include <iostream>
+#include <string> 
 using namespace std;
 // Incluindo arquivos
 #include "../ClassesHPP/alunos.hpp"
@@ -17,7 +18,6 @@ void cadastrarProfessor(Pessoas *pessoa[],Professores *professor[]);
 string registrandoTitulo();
 int escolhaOpcao1();
 string registrandoCpf(Pessoas *pessoa[]);
-bool conferindoCpf(Pessoas *pessoa[], string cpf);
 void escrevendoProfessorArquivo(Professores *professor);
 void escrevendoAlunoArquivo(Alunos *aluno);
 bool validandoData(int dia, int mes, int ano);

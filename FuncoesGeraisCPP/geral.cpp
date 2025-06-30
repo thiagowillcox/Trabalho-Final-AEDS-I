@@ -98,7 +98,7 @@ void lerArquivoAlunos(Alunos *aluno[], Pessoas *pessoa[])
         {
             // Nome
             nome= linha;
-            // Data
+            // Data 
             getline(arqAluno, linha);
             dia = std::stoi(linha);
             getline(arqAluno, linha);

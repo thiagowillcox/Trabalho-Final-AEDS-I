@@ -56,9 +56,8 @@ void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[])
     // Matrícula
     string matricula= registrandoMatricula(aluno);
     // Adicionando
-    int x = Alunos::TAMALUNO;
-    aluno[x] = new Alunos(nome, dia, mes, ano, cpf, matricula);
-    escrevendoAlunoArquivo(aluno[x]);
+    aluno[Alunos::TAMALUNO] = new Alunos(nome, dia, mes, ano, cpf, matricula);
+    escrevendoAlunoArquivo(aluno[Alunos::TAMALUNO]);
     // Mensagens
     cout << "\nPessoa cadastrada com sucesso!";
     cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
@@ -66,26 +65,21 @@ void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[])
     cout << endl << "Total de alunos: " << Alunos::TAMALUNO;
 }
 // Conferindo matrícula
-bool conferinfoMatricula(string matricula, Alunos *aluno[])
+/*bool conferinfoMatricula(string matricula, Alunos *aluno[])
 {
     for (int i=0; i<Alunos::TAMALUNO; i++)
     {
        if(aluno[i]->getNumeroMatricula()==matricula) return false;
     }
     return true;
-}
+}*/
 // Registrando matrícula
 string registrandoMatricula(Alunos *aluno[])
 {
     string matricula;
     bool erro= true;
-    while(erro)
-    {
-        cout << "\nDigite seu número de matrícula: ";
-        getline(cin, matricula);
-        if(conferinfoMatricula(matricula, aluno)) erro= false;
-        else cout << "\nEsse número de matrícula já está cadastrado";
-    }
+    cout << "\nDigite seu número de matrícula: ";
+    getline(cin, matricula);
     return matricula;
 }
 
@@ -128,16 +122,14 @@ void cadastrarProfessor(Pessoas *pessoa[],Professores *professor[])
     {
         cout << "\nDigite sua data de nascimento[xx/xx/xxxx]: ";
         scanf("%d/%d/%d", &dia, &mes, &ano);
-        // LIMPA O BUFFER APÓS scanf para que o próximo getline funcione
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if (!validandoData(dia, mes, ano)) erro = false;
     }
     // Título
     string titulo= registrandoTitulo();
     // Adicionando
-    int x = Professores::TAMPROFESSOR;
-    professor[x] = new Professores(nome, dia, mes, ano, cpf, titulo);
-    escrevendoProfessorArquivo(professor[x]);
+    professor[Professores::TAMPROFESSOR] = new Professores(nome, dia, mes, ano, cpf, titulo);
+    escrevendoProfessorArquivo(professor[Professores::TAMPROFESSOR]);
     // Mensagens
     cout << "\nPessoa cadastrada com sucesso!";
     cout << endl << "Total de pessoas: " << Pessoas::TAMPES;
@@ -230,26 +222,20 @@ bool validandoData(int dia, int mes, int ano)
     return erro;
 }
 // Conferindo se CPF existe
-bool conferindoCpf(Pessoas *pessoa[], string cpf)
+/*bool conferindoCpf(Pessoas *pessoa[], string cpf)
 {
     for (int i=0; i<Pessoas::TAMPES; i++)
     {
         if(pessoa[i]->getCpf()==cpf) return false;
     }
     return true;
-}
+}*/
 // Registrando CPF
 string registrandoCpf(Pessoas *pessoa[])
 {
     string cpf;
-    bool erro=true;
-    while (erro)
-    {
-        cout << "\nDigite seu cpf[xxx.xxx.xxx-xx]: ";
-        getline(cin, cpf);
-        if(conferindoCpf(pessoa, cpf)) erro=false;
-        else cout << "\nCPF já registrado\a";
-    }
+    cout << "\nDigite seu cpf[xxx.xxx.xxx-xx]: ";
+    getline(cin, cpf);
     return cpf;
 }
 // Escolha opção 1
