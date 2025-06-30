@@ -22,22 +22,21 @@ void escrevendoAlunoArquivo(Alunos *aluno)
     // Nome
     arquivo << aluno->getNome() << endl
     // Data
-    << aluno->getDia() << endl 
-    << aluno->getMes() << endl 
-    << aluno->getAno() << endl 
+    << aluno->getDia() << endl
+    << aluno->getMes() << endl
+    << aluno->getAno() << endl
     // CPF
     << aluno->getCpf() << endl
     // Número de matrícula
     << aluno->getNumeroMatricula() << endl
     << "xxxxx" << endl;
-    arquivo.close();  
+    arquivo.close();
 }
 // Cadastrar alunos
 void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[])
 {
     string nome;
     // Nome
-
     cout << "\n\nDigite seu nome: ";
     cin.ignore();
     getline(cin, nome);
@@ -50,10 +49,11 @@ void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[])
     {
         cout << "\nDigite sua data de nascimento[xx/xx/xxxx]: ";
         scanf("%d/%d/%d", &dia, &mes, &ano);
+        // LIMPA O BUFFER APÓS scanf para que o próximo getline funcione
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if (!validandoData(dia, mes, ano)) erro = false;
     }
     // Matrícula
-
     string matricula= registrandoMatricula(aluno);
     // Adicionando
     int x = Alunos::TAMALUNO;
@@ -70,7 +70,7 @@ bool conferinfoMatricula(string matricula, Alunos *aluno[])
 {
     for (int i=0; i<Alunos::TAMALUNO; i++)
     {
-       if(aluno[i]->getNumeroMatricula()==matricula) return false; 
+       if(aluno[i]->getNumeroMatricula()==matricula) return false;
     }
     return true;
 }
@@ -98,17 +98,17 @@ void escrevendoProfessorArquivo(Professores *professor)
     if(Professores::TAMPROFESSOR==0) arquivo.open("professores.txt");
     else arquivo.open("professores.txt", ios::app);
     // Nome
-    arquivo << professor->getNome() << endl 
+    arquivo << professor->getNome() << endl
     // Data
-    << professor->getDia() << endl 
-    << professor->getMes() << endl 
-    << professor->getAno() << endl 
+    << professor->getDia() << endl
+    << professor->getMes() << endl
+    << professor->getAno() << endl
     // CPF
-    << professor->getCpf() << endl 
+    << professor->getCpf() << endl
     // Titulação
     << professor->getTitulacao() << endl
     << "xxxxx" << endl;
-    arquivo.close();  
+    arquivo.close();
 }
 // Cadastrar professor
 void cadastrarProfessor(Pessoas *pessoa[],Professores *professor[])
@@ -128,10 +128,11 @@ void cadastrarProfessor(Pessoas *pessoa[],Professores *professor[])
     {
         cout << "\nDigite sua data de nascimento[xx/xx/xxxx]: ";
         scanf("%d/%d/%d", &dia, &mes, &ano);
+        // LIMPA O BUFFER APÓS scanf para que o próximo getline funcione
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if (!validandoData(dia, mes, ano)) erro = false;
     }
     // Título
-
     string titulo= registrandoTitulo();
     // Adicionando
     int x = Professores::TAMPROFESSOR;
@@ -156,6 +157,7 @@ string registrandoTitulo()
         cout << "\n3 para: Doutor";
         cout << "\nDigite: ";
         cin >> x;
+        // Não precisa de cin.ignore() aqui, pois o cin >> x já consome o \n
         if(x>=1 && x<=3) erro= false;
         else cout << "\nSomente números de 1 a 3\a";
     }
@@ -169,7 +171,7 @@ string registrandoTitulo()
         titulo= "Mestre";
         break;
     case 3:
-        titulo= "Doutor"; 
+        titulo= "Doutor";
         break;
     default:
         break;
@@ -259,6 +261,7 @@ int escolhaOpcao1()
     {
         cout << "\n\nDigite o que deseja: ";
         cin >> x;
+        // Não precisa de cin.ignore() aqui, pois o cin >> x já consome o \n
         if(x>=0 && x<=2) erro= false;
         else cout << "Somente números de 0 a 2\a";
     }

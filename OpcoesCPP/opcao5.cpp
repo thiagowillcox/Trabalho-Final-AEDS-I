@@ -10,7 +10,7 @@ using namespace std;
 #include "../ClassesHPP/pessoas.hpp"
 #include "../ClassesHPP/professores.hpp"
 
-/*PROFESSORES*/
+    /*PROFESSORES*/
 bool pesquisaCpfProfessor(string cpf, Professores *professor[])
 {
     for(int i = 0; i < Professores::TAMPROFESSOR; i++)
@@ -35,12 +35,11 @@ void excluindoProfessor(Professores *professor[], int x)
         delete professor[x];
         professor[x] = nullptr;
     }
-    for (int i = x; i < Professores::TAMPROFESSOR - 1; i++)
+    for (int i = x; i < Professores::TAMPROFESSOR -1; i++)
     {
         professor[i] = professor[i+1];
     }
-    professor[Professores::TAMPROFESSOR - 1] = nullptr;
-
+    professor[Professores::TAMPROFESSOR -1] = nullptr;
 }
 void apagandoProfessoresArquivo()
 {
@@ -55,7 +54,7 @@ void reescrevendoArquivoProfessor(Professores *professor[])
     arquivo.open("professores.txt", ios::app);
     for (int i=0; i<Professores::TAMPROFESSOR; i++)
     {
-        arquivo << endl << professor[i]->getNome() << endl
+        arquivo << professor[i]->getNome() << endl
         << professor[i]->getDia() << endl
         << professor[i]->getMes() << endl
         << professor[i]->getAno() << endl
@@ -71,12 +70,13 @@ void excluirProfessor(Professores *professor[])
     cout << "\n\nExcluir um professor";
     string cpf;
     cout << "\nDigite o CPF do professor que deseja excluir[0 para sair]: ";
-    cin >> cpf;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, cpf);
     if(cpf=="0") return;
     if(pesquisaCpfProfessor(cpf, professor))
     {
         string teste;
-        cout << "Tem certeza que deseja excluir " << cpf << " ?[S/N]";
+        cout << "Tem certeza que deseja excluir " << cpf << " ?[S/N]: ";
         cin >> teste;
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if(teste=="S" || teste=="s")
@@ -91,7 +91,7 @@ void excluirProfessor(Professores *professor[])
     else cout << "Não existe ninguém com esse CPF, confira se digitou certo";
 }
 
-/*ALUNOS*/
+    /*ALUNOS*/
 
 bool pesquisaCpfAluno(string cpf, Alunos *aluno[])
 {
@@ -117,11 +117,11 @@ void excluindoAluno(Alunos *aluno[], int x)
         delete aluno[x];
         aluno[x] = nullptr;
     }
-    for (int i = x; i < Alunos::TAMALUNO - 1; i++)
+    for (int i = x; i < Alunos::TAMALUNO -1; i++)
     {
         aluno[i] = aluno[i+1];
     }
-    aluno[Alunos::TAMALUNO - 1] = nullptr;
+    aluno[Alunos::TAMALUNO -1] = nullptr;
 }
 
 void apagandoAlunosArquivo()
@@ -153,7 +153,8 @@ void excluirAluno(Alunos *aluno[])
     cout << "\n\nExcluir um aluno";
     string cpf;
     cout << "\nDigite o CPF do aluno que deseja excluir[0 para sair]: ";
-    cin >> cpf;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, cpf);
     if(cpf=="0") return;
     if(pesquisaCpfAluno(cpf, aluno))
     {
