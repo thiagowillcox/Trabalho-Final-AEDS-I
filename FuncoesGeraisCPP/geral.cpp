@@ -5,6 +5,7 @@ using namespace std;
 #include <fstream>
 #include <string>
 #include <limits>
+#include <algorithm>
 // Bibliotecas gerais
 #include <fstream>
 // Incluindo arquivos
@@ -84,78 +85,154 @@ void opcoes(int x, Pessoas *pessoa[], Alunos *aluno[], Professores *professor[])
         break;
     }
 }
-// Ler arquivo de alunos
+
+
+bool is_blank(const std::string& s) 
+{
+    return s.empty() || std::all_of(s.begin(), s.end(), ::isspace);
+}
+
+
 void lerArquivoAlunos(Alunos *aluno[], Pessoas *pessoa[])
 {
-    ifstream arqAluno("alunos.txt");
-    if (arqAluno.is_open())
+    std::ifstream arqAluno("alunos.txt");
+    if (!arqAluno.is_open())
     {
-        string linha;
-        int dia, mes, ano;
-        string nome, cpf, matricula;
-        int i=0;
-        while (getline(arqAluno, linha)) 
+        std::cerr << "Erro: Nao foi possivel abrir o arquivo alunos.txt" << std::endl;
+        return;
+    }
+
+    std::string linha;
+    int dia, mes, ano;
+    std::string nome, cpf, matricula;
+    int i = 0;
+
+    while (std::getline(arqAluno, linha))
+    {
+        if (is_blank(linha) || linha == "xxxxx") {
+            continue;
+        }
+
+        bool erro_na_leitura = false;
+        nome = linha;
+
+        auto ler_int_seguro = [&](int& var_destino, const std::string& tipo_dado) {
+            if (!std::getline(arqAluno, linha)) {
+                std::cerr << "Erro: Arquivo terminou inesperadamente ao ler " << tipo_dado << " para " << nome << std::endl;
+                erro_na_leitura = true;
+                return false;
+            }
+            try {
+                var_destino = std::stoi(linha);
+                return true;
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Erro de formato (" << tipo_dado << ") para o aluno " << nome << ": '" << linha << "' nao e um numero valido. Pulando entrada." << std::endl;
+                erro_na_leitura = true;
+                return false;
+            } catch (const std::out_of_range& e) {
+                std::cerr << "Erro de intervalo (" << tipo_dado << ") para o aluno " << nome << ": '" << linha << "' fora do limite. Pulando entrada." << std::endl;
+                erro_na_leitura = true;
+                return false;
+            }
+        };
+
+        if (!ler_int_seguro(dia, "dia") ||
+            !ler_int_seguro(mes, "mes") ||
+            !ler_int_seguro(ano, "ano"))
         {
-            // Nome
-            nome= linha;
-            // Data 
-            getline(arqAluno, linha);
-            dia = std::stoi(linha);
-            getline(arqAluno, linha);
-            mes = std::stoi(linha);
-            getline(arqAluno, linha);
-            ano = std ::stoi(linha);
-            // CPF
-            getline(arqAluno, linha);
-            cpf= linha;
-            // Matrícula
-            getline(arqAluno, linha);
-            matricula= linha;
-            // Separador
-            getline(arqAluno, linha);
-            // Criando aluno
-            aluno[i]= new Alunos(nome, dia, mes, ano, cpf, matricula);
+            for (int k = 0; k < 3; ++k) {
+                if (!std::getline(arqAluno, linha)) break;
+            }
+            continue;
+        }
+
+        if (!std::getline(arqAluno, cpf)) {
+            std::cerr << "Erro: Arquivo terminou inesperadamente ao ler o CPF para " << nome << std::endl;
+            continue;
+        }
+        if (!std::getline(arqAluno, matricula)) {
+            std::cerr << "Erro: Arquivo terminou inesperadamente ao ler a matricula para " << nome << std::endl;
+            continue;
+        }
+
+        if (!erro_na_leitura) {
+            aluno[i] = new Alunos(nome, dia, mes, ano, cpf, matricula);
             i++;
         }
-        arqAluno.close();
     }
+    arqAluno.close();
 }
-// Ler arquivo de professores
+
 void lerArquivoProfessores(Professores *professor[], Pessoas *pessoa[])
 {
-    ifstream arqProf("professores.txt");
-    if (arqProf.is_open())
+    std::ifstream arqProf("professores.txt");
+    if (!arqProf.is_open())
     {
-        string linha;
-        int dia, mes, ano;
-        string nome, cpf, titulacao;
-        int i=0;
-        while (getline(arqProf, linha)) 
+        std::cerr << "Erro: Nao foi possivel abrir o arquivo professores.txt" << std::endl;
+        return;
+    }
+
+    std::string linha;
+    int dia, mes, ano;
+    std::string nome, cpf, titulacao;
+    int i = 0;
+
+    while (std::getline(arqProf, linha))
+    {
+        if (is_blank(linha) || linha == "xxxxx") {
+            continue;
+        }
+
+        bool erro_na_leitura = false;
+        nome = linha;
+
+        auto ler_int_seguro = [&](int& var_destino, const std::string& tipo_dado) {
+            if (!std::getline(arqProf, linha)) {
+                std::cerr << "Erro: Arquivo terminou inesperadamente ao ler " << tipo_dado << " para " << nome << std::endl;
+                erro_na_leitura = true;
+                return false;
+            }
+            try {
+                var_destino = std::stoi(linha);
+                return true;
+            } catch (const std::invalid_argument& e) {
+                std::cerr << "Erro de formato (" << tipo_dado << ") para o professor " << nome << ": '" << linha << "' nao e um numero valido. Pulando entrada." << std::endl;
+                erro_na_leitura = true;
+                return false;
+            } catch (const std::out_of_range& e) {
+                std::cerr << "Erro de intervalo (" << tipo_dado << ") para o professor " << nome << ": '" << linha << "' fora do limite. Pulando entrada." << std::endl;
+                erro_na_leitura = true;
+                return false;
+            }
+        };
+
+        if (!ler_int_seguro(dia, "dia") ||
+            !ler_int_seguro(mes, "mes") ||
+            !ler_int_seguro(ano, "ano"))
         {
-            // Nome
-            nome= linha;
-            // Data
-            getline(arqProf, linha);
-            dia = std::stoi(linha);
-            getline(arqProf, linha);
-            mes = std::stoi(linha);
-            getline(arqProf, linha);
-            ano = std ::stoi(linha);
-            // CPF
-            getline(arqProf, linha);
-            cpf= linha;
-            // Matrícula
-            getline(arqProf, linha);
-            titulacao= linha;
-            // Separador
-            getline(arqProf, linha);
-            // Criando aluno
-            professor[i]= new Professores(nome, dia, mes, ano, cpf, titulacao);
+        for (int k = 0; k < 3; ++k) {
+                if (!std::getline(arqProf, linha)) break;
+            }
+            continue;
+        }
+
+        if (!std::getline(arqProf, cpf)) {
+            std::cerr << "Erro: Arquivo terminou inesperadamente ao ler o CPF para " << nome << std::endl;
+            continue;
+        }
+        if (!std::getline(arqProf, titulacao)) {
+            std::cerr << "Erro: Arquivo terminou inesperadamente ao ler a titulacao para " << nome << std::endl;
+            continue;
+        }
+        
+        if (!erro_na_leitura) {
+            professor[i] = new Professores(nome, dia, mes, ano, cpf, titulacao);
             i++;
         }
-        arqProf.close();
     }
+    arqProf.close();
 }
+
 // Lendo pessoas do arquivo
 void registrandoPessoas(Pessoas *pessoa[], Alunos *aluno[], Professores *professor[]) 
 {

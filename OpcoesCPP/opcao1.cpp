@@ -77,7 +77,7 @@ void cadastrarAluno(Pessoas *pessoa[], Alunos *aluno[])
 string registrandoMatricula(Alunos *aluno[])
 {
     string matricula;
-    bool erro= true;
+    
     cout << "\nDigite seu número de matrícula: ";
     getline(cin, matricula);
     return matricula;
@@ -123,8 +123,7 @@ void cadastrarProfessor(Pessoas *pessoa[],Professores *professor[])
         cout << "\nDigite sua data de nascimento[xx/xx/xxxx]: ";
         scanf("%d/%d/%d", &dia, &mes, &ano);
         cin.ignore(numeric_limits<streamsize>::max(), '\n');
-        if (!validandoData(dia, mes, ano)) erro = false;
-    }
+        if (!validandoData(dia, mes, ano)) erro = false;     }
     // Título
     string titulo= registrandoTitulo();
     // Adicionando

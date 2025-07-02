@@ -4,6 +4,7 @@
 #include <iostream>
 using namespace std;
 #include <string>
+
 // Class data
 class Data{
 private:

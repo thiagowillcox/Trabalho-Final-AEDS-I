@@ -9,8 +9,13 @@ using namespace std;
 #include "../ClassesHPP/professores.hpp"
 
 void opcao2(Alunos *aluno[], Professores *professor[]);
+
 void opcoesOpcao2(int x);
+
 void listarAluno();
+
 void listarProfessores();
+
 int escolhaOpcao2();
+
 #endif

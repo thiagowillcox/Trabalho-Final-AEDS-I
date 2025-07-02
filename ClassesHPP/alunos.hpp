@@ -6,6 +6,7 @@ using namespace std;
 #include <string>
 // Incluindo arquivos
 #include "pessoas.hpp"
+
 // Class aluno
 class Alunos:public Pessoas{
 private:

@@ -20,7 +20,7 @@ void aniversariantesMes(int *mes, Professores *professor[], int *aniversariantes
     {
         if (professor[i] != nullptr && professor[i]->getMes() == *mes)
         {
-            *aniversariantes++;
+            (*aniversariantes)++;
             cout << "\nNome: " << professor[i]->getNome()
                  << " - Data de nascimento: " << professor[i]->getDia()
                  << "/" << professor[i]->getMes()
@@ -43,7 +43,7 @@ void aniversariantesMes(int *mes, Alunos *aluno[], int *aniversariantes)
     {
         if (aluno[i] != nullptr && aluno[i]->getMes() == *mes)
         {
-            *aniversariantes++;
+            (*aniversariantes)++;
             cout << "\nNome: " << aluno[i]->getNome()
                  << " - Data de nascimento: " << aluno[i]->getDia()
                  << "/" << aluno[i]->getMes()
@@ -56,16 +56,27 @@ void aniversariantesMes(int *mes, Alunos *aluno[], int *aniversariantes)
 
 void separacao(int *mes, Alunos *aluno[], Professores *professor[])
 {
-    int aniversariantes= 0;
+    int aniversariantes = 0;
     aniversariantesMes(mes, aluno, &aniversariantes);
     aniversariantesMes(mes, professor, &aniversariantes);
-    if (aniversariantes==0) cout << "\nNão tem nenhum aniversariante nesse mês";
-    else cout << "\nExistem " << aniversariantes << " nesse mês";
+    if (aniversariantes == 0)
+        cout << "\nNão tem nenhum aniversariante nesse mês";
+    else
+        cout << "\nExistem " << aniversariantes << " nesse mês";
 }
 
-int pegandoMesAniversariante(int *mes)
+void opcao7escolha(int *mes, Alunos *aluno[], Professores *professor[])
 {
-    bool teste= true;
+    cout << "\n\n7.0 – Voltar ao menu anterior[0]";
+    cout << "\n7.1 - Informar o mês a ser pesquisado[1]";
+    cout << "\n7.2 - Listar aniversáriantes do mês[2]";
+    int x = escolhaOpcao7();
+    opcoesOpcao7(x, mes, aluno, professor);
+}
+
+void pegandoMesAniversariante(int *mes, Alunos *aluno[], Professores *professor[])
+{
+    bool teste = true;
     while (teste)
     {
         cout << "\nDigite o mês que deseja: ";
@@ -76,10 +87,12 @@ int pegandoMesAniversariante(int *mes)
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
         }
-        else if (*mes >= 1 && *mes <= 12) teste= false;
-        else cout << "\nMês inválido[1 a 12]\a";
+        else if (*mes >= 1 && *mes <= 12)
+            teste = false;
+        else
+            cout << "\nMês inválido[1 a 12]\a";
     }
-    return *mes;
+    opcao7escolha(mes, aluno, professor);
 }
 
 void opcoesOpcao7(int x, int *mes, Alunos *aluno[], Professores *professor[])
@@ -89,7 +102,7 @@ void opcoesOpcao7(int x, int *mes, Alunos *aluno[], Professores *professor[])
     case 0:
         break;
     case 1:
-        pegandoMesAniversariante(mes);
+        pegandoMesAniversariante(mes, aluno, professor);
         break;
     case 2:
         separacao(mes, aluno, professor);
@@ -115,17 +128,8 @@ int escolhaOpcao7()
     return x;
 }
 
-void opcao7escolha( int *mes, Alunos *aluno[], Professores *professor[])
-{
-    cout << "\n\n7.0 – Voltar ao menu anterior[0]";
-    cout << "\n7.1 - Informar o mês a ser pesquisado[1]";
-    cout << "\n7.2 - Listar aniversáriantes do mês[2]";
-    int x = escolhaOpcao7();
-    opcoesOpcao7(x, mes, aluno, professor);
-}
-
 void opcao7(Alunos *aluno[], Professores *professor[])
 {
-    int x=0;
-    opcao7escolha( &x, aluno, professor);
+    int mes_local = 0;
+    opcao7escolha(&mes_local, aluno, professor);
 }

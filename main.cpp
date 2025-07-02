@@ -18,19 +18,25 @@ int main ()
 {
     setlocale(LC_ALL, "Portuguese");
     system("chcp 65001 > nul");
+
     Pessoas *pessoa[_MAX];
     Alunos *aluno[_MAX];
     Professores *professor[_MAX];
+
     for (int i = 0; i < _MAX; ++i)
     {
         pessoa[i] = nullptr;
         aluno[i] = nullptr;
         professor[i] = nullptr;
     }
+
     registrandoPessoas(pessoa, aluno, professor);
     instrcoes();
+
     int x= escolha();
+
     cout << "\n\nBem-vindo, siga as instruções: ";
+
     while (x!=0)
     {
         opcoes(x, pessoa, aluno, professor);
@@ -39,7 +45,9 @@ int main ()
         instrcoes();
         x= escolha();
     }
+
     fechamento ();
     liberarMemoria(pessoa, aluno, professor);
+    
     return 0;
 }
